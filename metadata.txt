@@ -7,7 +7,7 @@
 name=Extract Coordinates
 qgisMinimumVersion=3.0
 description=Cette extension aide a extraire les coordonnees de sommets (noeuds) d'une couche vecteur en DMS ou selon une zone UTM definie
-version=1.0
+version=1.0.1
 author=Maurice KANAMA
 email=mauricekanama1@gmail.com
 
