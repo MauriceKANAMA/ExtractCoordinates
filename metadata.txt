@@ -1,0 +1,47 @@
+# This file contains metadata for your plugin.
+# This file should be included when you package your plugin.
+
+# Mandatory items:
+
+[general]
+name=Extract Coordinates
+qgisMinimumVersion=3.0
+description=Cette extension aide a extraire les coordonnees de sommets (noeuds) d'une couche vecteur en DMS ou selon une zone UTM definie
+version=1.0
+author=Maurice KANAMA
+email=mauricekanama1@gmail.com
+
+about=Cette extension aide à extraire les coordonnées de sommets (noeuds) d'une couche vecteur en coordonnée Degrés Minutes Secondes ou selon une zone UTM.
+
+tracker=https://github.com/MauriceKANAMA/ExtractCoordinates
+repository=https://github.com/MauriceKANAMA/ExtractCoordinates
+# End of mandatory metadata
+
+# Recommended items:
+
+hasProcessingProvider=yes
+# Uncomment the following line and add your changelog:
+# changelog=
+
+# Tags are comma separated with spaces allowed
+tags=python extraction coordonnées sommets vecteur
+
+homepage=https://github.com/MauriceKANAMA/ExtractCoordinates
+category=Plugins
+icon=icon.png
+# experimental flag
+experimental=True
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
+
+# Since QGIS 3.8, a comma separated list of plugins to be installed
+# (or upgraded) can be specified.
+# Check the documentation for more information.
+# plugin_dependencies=
+
+# category=Vector
+
+# If the plugin can run on QGIS Server.
+server=False
+
