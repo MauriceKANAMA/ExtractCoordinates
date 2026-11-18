@@ -2,14 +2,14 @@
 <img width="512" height="512" alt="icon" src="https://github.com/user-attachments/assets/214a8c51-9ad4-47d1-b405-b6b6c5ef6490" />
 
 
-Extension QGIS qui extrait les sommets (nœuds) des couches vecteur de type **points, lignes ou polygones**, et calcule leurs coordonnées en plusieurs systèmes dont le Degrés Minutes Secondes (DMS), Degrés Décimals (DD) et Universal Transverse Mercator (UTM).
+Extension QGIS qui extrait les sommets (nœuds) des couches vectorielles de type **(points), lignes ou polygones**, et calcule leurs coordonnées en plusieurs systèmes (Degrés Minutes Secondes (DMS), Degrés Décimals (DD) et Universal Transverse Mercator (UTM)).
 
 ## Fonctionnalités
 
-- Extraction de tous les sommets d'une couche de points, de lignes ou de polygones.
-- Coordonnées en **degrés, minutes, secondes** (format `27°28'30.12" E`).
-- Coordonnées en **degrés décimaux** (WGS 84, EPSG:4326).
-- Coordonnées en **UTM** (EPSG:...) adapté.
+- Extraction de tous les sommets d'une couche vectorielle de lignes ou de polygones mais fonctionne aussi sur le couche des points.
+- Extraction des coordonnées en **degrés, minutes, secondes** (format `27°28'30.12" E`) de ses sommets (nœuds).
+- Extraction des coordonnées en **degrés décimaux** (WGS 84, EPSG:4326) de ses sommets (nœuds).
+- Extraction des coordonnées en **UTM** adapté à votre zone pour les sommets (nœuds) extrait.
 - Ajout facultatif d'une ou plusieurs colonnes de la couche source.
 
 ## Installation
@@ -18,7 +18,7 @@ Extension QGIS qui extrait les sommets (nœuds) des couches vecteur de type **po
 
 1. Ouvrez QGIS, puis allez dans **Extensions > Gérer et installer les extensions**.
 2. Cherchez `Extract Coordinates`.
-3. Cochez la case du plugin, puis cliquez sur **Installer**.
+3. Installez et **cochez** la case du plugin.
 
 ### Installation manuelle
 
