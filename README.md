@@ -46,8 +46,8 @@ La couche créée s'ajoute automatiquement au projet.
 | `LatitudeDMS` | Latitude en degrés, minutes, secondes (N ou S) |
 | `LongitudeDD` | Longitude en degrés décimaux (WGS 84) |
 | `LatitudeDD` | Latitude en degrés décimaux (WGS 84) |
-| `LongitudeUTM` | Coordonnée Est en UTM 35S (mètres) |
-| `LatitudeUTM` | Coordonnée Nord en UTM 35S (mètres) |
+| `LongitudeUTM` | Coordonnée Est en UTM (mètres) |
+| `LatitudeUTM` | Coordonnée Nord en UTM (mètres) |
 
 Les colonnes choisies à l'étape 3 sont ajoutées à la fin. Si leur nom est déjà utilisé, elles reçoivent le préfixe `attr_`.
 
