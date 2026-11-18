@@ -5,12 +5,12 @@ from qgis.core import (
     QgsFeatureSink, QgsField, QgsFields, QgsGeometry, QgsPointXY,
     QgsProcessing, QgsProcessingAlgorithm, QgsProcessingException,
     QgsProcessingParameterFeatureSink, QgsProcessingParameterFeatureSource,
-    QgsProcessingProvider, QgsProject, QgsWkbTypes
+    QgsProcessingParameterField, QgsProcessingProvider, QgsProject, QgsWkbTypes
 )
 
 
 def to_dms(value, pos_label, neg_label):
-    """Convertit des degrés décimaux en format 27°28'30.12" E (logique du modèle)."""
+    """Convertit des degrés décimaux en format 27°28'30.12\" E (logique du modèle)."""
     hemi = neg_label if value < 0 else pos_label
     t = round(abs(value) * 3600, 2)
     deg = int(t // 3600)
@@ -21,6 +21,7 @@ def to_dms(value, pos_label, neg_label):
 
 class ExtractionSommetsAlgorithm(QgsProcessingAlgorithm):
     INPUT = 'INPUT'
+    CHAMP = 'CHAMP'
     OUTPUT = 'OUTPUT'
 
     def initAlgorithm(self, config=None):
@@ -30,6 +31,13 @@ class ExtractionSommetsAlgorithm(QgsProcessingAlgorithm):
             [QgsProcessing.TypeVectorPoint,
              QgsProcessing.TypeVectorLine,
              QgsProcessing.TypeVectorPolygon]))
+        self.addParameter(QgsProcessingParameterField(
+            self.CHAMP,
+            'Colonnes à ajouter',
+            parentLayerParameterName=self.INPUT,
+            type=QgsProcessingParameterField.Any,
+            allowMultiple=True,
+            optional=True))
         self.addParameter(QgsProcessingParameterFeatureSink(
             self.OUTPUT, 'Sommets extraits'))
 
@@ -39,14 +47,27 @@ class ExtractionSommetsAlgorithm(QgsProcessingAlgorithm):
             raise QgsProcessingException(
                 self.invalidSourceError(parameters, self.INPUT))
 
+        noms_champs = self.parameterAsFields(parameters, self.CHAMP, context)
+        src_fields = source.fields()
+        idx_champs = [src_fields.indexFromName(n) for n in noms_champs
+                      if src_fields.indexFromName(n) >= 0]
+
         fields = QgsFields()
         fields.append(QgsField('id', QVariant.Int))
-        fields.append(QgsField('Longitude DMS', QVariant.String))
-        fields.append(QgsField('Latitude DMS', QVariant.String))
-        fields.append(QgsField('Longitude DD', QVariant.Double))
-        fields.append(QgsField('Latitude DD', QVariant.Double))
-        fields.append(QgsField('Longitude UTM', QVariant.Double))
-        fields.append(QgsField('Latitude UTM', QVariant.Double))
+        fields.append(QgsField('LongitudeDMS', QVariant.String))
+        fields.append(QgsField('LatitudeDMS', QVariant.String))
+        fields.append(QgsField('LongitudeDD', QVariant.Double))
+        fields.append(QgsField('LatitudeDD', QVariant.Double))
+        fields.append(QgsField('LongitudeUTM', QVariant.Double))
+        fields.append(QgsField('LatitudeUTM', QVariant.Double))
+
+        for idx in idx_champs:
+            champ_def = QgsField(src_fields.field(idx))
+            nom_sortie = champ_def.name()
+            if nom_sortie in fields.names():
+                nom_sortie = 'attr_' + nom_sortie
+            champ_def.setName(nom_sortie)
+            fields.append(champ_def)
 
         (sink, dest_id) = self.parameterAsSink(
             parameters, self.OUTPUT, context, fields,
@@ -63,6 +84,7 @@ class ExtractionSommetsAlgorithm(QgsProcessingAlgorithm):
             src_crs, QgsCoordinateReferenceSystem('EPSG:32735'), ctx)
 
         total = source.featureCount() or 1
+        compteur = 0
 
         for current, feat in enumerate(source.getFeatures()):
             if feedback.isCanceled():
@@ -79,7 +101,6 @@ class ExtractionSommetsAlgorithm(QgsProcessingAlgorithm):
                 x, y = v.x(), v.y()
 
                 # Pour les polygones, on ignore le sommet de fermeture
-                # (identique au premier sommet de l'anneau).
                 if is_polygon:
                     key = (round(x, 9), round(y, 9))
                     if key in seen:
@@ -90,17 +111,23 @@ class ExtractionSommetsAlgorithm(QgsProcessingAlgorithm):
                 p_wgs = to_wgs.transform(p_src)
                 p_utm = to_utm.transform(p_src)
 
-                out = QgsFeature(fields)
-                out.setGeometry(QgsGeometry.fromPointXY(p_src))
-                out.setAttributes([
-                    feat.id(),
+                compteur += 1
+
+                attributs = [
+                    compteur,
                     to_dms(p_wgs.x(), 'E', 'O'),
                     to_dms(p_wgs.y(), 'N', 'S'),
                     p_wgs.x(),
                     p_wgs.y(),
                     p_utm.x(),
                     p_utm.y(),
-                ])
+                ]
+                for idx in idx_champs:
+                    attributs.append(feat.attribute(idx))
+
+                out = QgsFeature(fields)
+                out.setGeometry(QgsGeometry.fromPointXY(p_src))
+                out.setAttributes(attributs)
                 sink.addFeature(out, QgsFeatureSink.FastInsert)
 
             feedback.setProgress(int(100 * current / total))
@@ -121,8 +148,9 @@ class ExtractionSommetsAlgorithm(QgsProcessingAlgorithm):
 
     def shortHelpString(self):
         return ('Extrait les sommets (nœuds) des points, lignes et polygones '
-                'et calcule leurs coordonnées en WGS 84 (degrés minutes secondes (DMS) et degrés décimaux (DD) '
-                'et en UTM.')
+                'et calcule leurs coordonnées en WGS 84 (degrés décimaux et DMS) '
+                'et en UTM 35S (EPSG:32735). Une colonne de la couche source '
+                'peut être ajoutée facultativement afin de mieux se retrouver en ce qui concerne les points de la couche.')
 
     def createInstance(self):
         return ExtractionSommetsAlgorithm()
