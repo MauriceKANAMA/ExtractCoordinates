@@ -37,6 +37,10 @@ Extension QGIS qui extrait les sommets (nœuds) des couches vectorielles de type
 
 La couche créée s'ajoute automatiquement au projet.
 
+![Fenêtre de l'algorithme](capture_algorithme.png)
+
+![Table des sommets extraits](capture_resultat.png)
+
 ## Colonnes produites
 
 | Colonne | Contenu |
@@ -59,6 +63,11 @@ Les colonnes choisies à l'étape 3 sont ajoutées à la fin. Si leur nom est d�
 ## Signaler un problème
 
 Pour signaler un bogue ou proposer une amélioration, ouvrez une demande sur la page **Issues** de ce dépôt.
+
+## Tests
+
+Les fonctions de calcul sont testées dans le dossier `test/test_calculs.py` :
+conversion en DMS, code EPSG UTM et extraction des sommets des polygones (trous compris).
 
 ## Auteur
 
