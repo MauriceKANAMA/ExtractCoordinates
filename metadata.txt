@@ -5,9 +5,9 @@
 
 [general]
 name=Extract Coordinates
-qgisMinimumVersion=3.0
+qgisMinimumVersion=3.22
 description=Cette extension aide a extraire les coordonnees de sommets (noeuds) d'une couche vecteur en DMS ou selon une zone UTM definie
-version=3.0
+version=3.1
 author=Maurice KANAMA
 email=mauricekanama1@gmail.com
 
@@ -21,6 +21,7 @@ repository=https://github.com/MauriceKANAMA/ExtractCoordinates
 
 hasProcessingProvider=yes
 changelog=
+    3.1 : corrections de compatibilité avec Qt6 (noms complets des constantes QGIS) ; version minimale de QGIS portée à 3.22
     3.0 : Refonte de l'extension. Le choix de zone UTM (liste de 121 entrées) est remplacé par un sélecteur de système de coordonnées projeté (UTM, Lambert, etc.) ; les systèmes géographiques (en degrés) sont refusés ; le contrôle de validité s'applique à tout système projeté ; les données couvrant plusieurs zones UTM sont refusées, avec un message ; les colonnes UTM contiennent les coordonnées dans le système projeté choisi, en mètres. Contrôles avant création de la couche (système de coordonnées, couche vide, entités sans géométrie). Traduction en anglais, aide complète, tests unitaires. Correction des secondes arrondies à 60, et des sommets de polygones (trous inclus).
     2.0 : Numérotation automatique de la colonne id ; ajout facultatif de plusieurs colonnes de la couche source
     1.0.1 : Correction de compatibilité avec Qt6
