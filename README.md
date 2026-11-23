@@ -1,4 +1,4 @@
-# Extract Coordinates <img width="250" height="250" alt="icon" src="https://github.com/user-attachments/assets/214a8c51-9ad4-47d1-b405-b6b6c5ef6490" />
+# Extract Coordinates <img width="50" height="50" alt="icon" src="https://github.com/user-attachments/assets/214a8c51-9ad4-47d1-b405-b6b6c5ef6490" />
 
 
 Extension QGIS qui extrait les sommets (nœuds) des couches vectorielles de type **(points), lignes ou polygones**, et calcule leurs coordonnées en plusieurs systèmes (Degrés Minutes Secondes (DMS), Degrés Décimals (DD) et Universal Transverse Mercator (UTM)).
