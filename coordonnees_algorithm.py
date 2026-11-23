@@ -83,14 +83,14 @@ class ExtractionSommetsAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(QgsProcessingParameterFeatureSource(
             self.INPUT,
             self.tr('Couche vecteur (points, lignes ou polygones)'),
-            [QgsProcessing.TypeVectorPoint,
-             QgsProcessing.TypeVectorLine,
-             QgsProcessing.TypeVectorPolygon]))
+            [QgsProcessing.SourceType.TypeVectorPoint,
+             QgsProcessing.SourceType.TypeVectorLine,
+             QgsProcessing.SourceType.TypeVectorPolygon]))
         self.addParameter(QgsProcessingParameterField(
             self.CHAMP,
             self.tr('Colonnes à ajouter'),
             parentLayerParameterName=self.INPUT,
-            type=QgsProcessingParameterField.Any,
+            type=QgsProcessingParameterField.DataType.Any,
             allowMultiple=True,
             optional=True))
         self.addParameter(QgsProcessingParameterCrs(
@@ -199,7 +199,7 @@ class ExtractionSommetsAlgorithm(QgsProcessingAlgorithm):
 
         (sink, dest_id) = self.parameterAsSink(
             parameters, self.OUTPUT, context, fields,
-            QgsWkbTypes.Point, src_crs)
+            QgsWkbTypes.Type.Point, src_crs)
         if sink is None:
             raise QgsProcessingException(
                 self.invalidSinkError(parameters, self.OUTPUT))
@@ -216,7 +216,7 @@ class ExtractionSommetsAlgorithm(QgsProcessingAlgorithm):
                 break
             geom = feat.geometry()
 
-            if geom.type() == QgsWkbTypes.PolygonGeometry:
+            if geom.type() == QgsWkbTypes.GeometryType.PolygonGeometry:
                 points = sommets_polygone(geom)
             else:
                 points = [QgsPointXY(v) for v in geom.vertices()]
@@ -242,7 +242,7 @@ class ExtractionSommetsAlgorithm(QgsProcessingAlgorithm):
                 out = QgsFeature(fields)
                 out.setGeometry(QgsGeometry.fromPointXY(p_src))
                 out.setAttributes(attributs)
-                sink.addFeature(out, QgsFeatureSink.FastInsert)
+                sink.addFeature(out, QgsFeatureSink.SinkFlag.FastInsert)
 
             feedback.setProgress(int(100 * current / total))
 
