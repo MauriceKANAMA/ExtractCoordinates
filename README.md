@@ -1,5 +1,5 @@
 # Extract Coordinates
-<img width="512" height="512" alt="icon" src="https://github.com/user-attachments/assets/214a8c51-9ad4-47d1-b405-b6b6c5ef6490" />
+<img width="400" height="400" alt="icon" src="https://github.com/user-attachments/assets/214a8c51-9ad4-47d1-b405-b6b6c5ef6490" />
 
 
 Extension QGIS qui extrait les sommets (nœuds) des couches vectorielles de type **(points), lignes ou polygones**, et calcule leurs coordonnées en plusieurs systèmes (Degrés Minutes Secondes (DMS), Degrés Décimals (DD) et Universal Transverse Mercator (UTM)).
@@ -31,9 +31,10 @@ Extension QGIS qui extrait les sommets (nœuds) des couches vectorielles de type
 
 1. Cliquez sur l'icône **Extract Coordinates** dans la barre d'outils, ou ouvrez la boîte à outils de traitement (**Ctrl+Alt+T**) et cherchez « Extraire les sommets ».
 2. Dans **Couche vecteur**, choisissez une couche de points, de lignes ou de polygones.
-3. Dans **Colonnes à ajouter (facultatif)**, cochez les colonnes de la couche que vous voulez retrouver dans le résultat. Vous pouvez laisser ce champ vide.
-4. Dans **Sommets extraits**, indiquez le fichier de sortie (par exemple `sommets.gpkg` ou `sommets.xlsx`).
-5. Cliquez sur **Exécuter**.
+3. Dans **Colonnes à ajouter (facultatif)**, cochez les colonnes à recopier. Vous pouvez laisser ce champ vide.
+4. Dans **Système de coordonnées projeté**, choisissez le système voulu avec le sélecteur (icône à droite). Par défaut : WGS 84 / UTM zone 35S.
+5. Dans **Sommets extraits**, indiquez le fichier de sortie (par exemple `sommets.gpkg`).
+6. Cliquez sur **Exécuter**.
 
 La couche créée s'ajoute automatiquement au projet.
 
@@ -50,15 +51,17 @@ La couche créée s'ajoute automatiquement au projet.
 | `LatitudeDMS` | Latitude en degrés, minutes, secondes (N ou S) |
 | `LongitudeDD` | Longitude en degrés décimaux (WGS 84) |
 | `LatitudeDD` | Latitude en degrés décimaux (WGS 84) |
-| `LongitudeUTM` | Coordonnée Est en UTM (mètres) |
-| `LatitudeUTM` | Coordonnée Nord en UTM (mètres) |
+| `LongitudeUTM` | Coordonnée Est (ou X) dans le système projeté choisi (mètres) |
+| `LatitudeUTM` | Coordonnée Nord (ou Y) dans le système projeté choisi (mètres) |
 
 Les colonnes choisies à l'étape 3 sont ajoutées à la fin. Si leur nom est déjà utilisé, elles reçoivent le préfixe `attr_`.
 
 ## Remarques
 
-- Pour un **polygone**, le sommet de fermeture (qui répète le premier sommet) n'est pas extrait.
-- Le format de sortie est celui que vous choisissez (GeoPackage, Shapefile, XLSX, etc.).
+- Pour un **polygone**, le sommet de fermeture (qui répète le premier sommet) n'est pas extrait ; les trous sont inclus.
+- Les systèmes géographiques (en degrés) ne sont pas acceptés : les colonnes projetées sont toujours en mètres.
+- Le traitement s'arrête, sans créer de couche, dans les cas suivants : données hors de la zone de validité du système choisi, couche sans système de coordonnées, couche vide, entités sans géométrie, données qui s'étendent sur plusieurs zones UTM, ou zone UTM qui ne correspond pas aux données.
+- Pour une couche qui couvre plusieurs zones UTM, extrayez les données zone par zone.
 
 ## Signaler un problème
 
