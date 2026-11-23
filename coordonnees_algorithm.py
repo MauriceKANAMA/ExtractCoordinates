@@ -242,7 +242,7 @@ class ExtractionSommetsAlgorithm(QgsProcessingAlgorithm):
                 out = QgsFeature(fields)
                 out.setGeometry(QgsGeometry.fromPointXY(p_src))
                 out.setAttributes(attributs)
-                sink.addFeature(out, QgsFeatureSink.SinkFlag.FastInsert)
+                sink.addFeature(out)
 
             feedback.setProgress(int(100 * current / total))
 
